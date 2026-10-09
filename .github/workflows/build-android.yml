@@ -15,7 +15,7 @@ jobs:
         submodules: recursive
 
     - name: Setup Java
-      uses: actions/setup-java@v4
+      uses: actions/setup-java@v5
       with:
         distribution: 'temurin'
         java-version: '11'
@@ -23,10 +23,13 @@ jobs:
     - name: Setup Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.10'
+        python-version: '3.11'
+        
+    - name: Pre-install dependencies
+      run: pip install aqtinstall
 
     - name: Setup Qt
-      uses: jurplel/install-qt-action@v3
+      uses: jurplel/install-qt-action@v4
       with:
         version: '5.15.2'
         target: 'android'
