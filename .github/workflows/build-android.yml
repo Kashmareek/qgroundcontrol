@@ -20,18 +20,11 @@ jobs:
         distribution: 'temurin'
         java-version: '11'
 
-    - name: Setup Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.14'
-
     - name: Setup Qt
       uses: jurplel/install-qt-action@v4
       with:
         version: '5.15.2'
         target: 'android'
-        arch: 'android_arm64_v8a'
-        setup-python: 'false'
 
     - name: Build QGC
       run: |
