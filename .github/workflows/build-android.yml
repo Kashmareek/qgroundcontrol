@@ -1,0 +1,32 @@
+name: Android APK Build (sky-rus)
+on: [push, workflow_dispatch]
+jobs:
+  build-android:
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v4
+      with: { submodules: recursive }
+    - uses: actions/setup-java@v5
+      with: { distribution: 'temurin', java-version: '17' }
+    - uses: astral-sh/setup-uv@v10.2.0
+      with: { python-version: '3.12' }
+    - uses: jurplel/install-qt-action@v4
+      with: 
+        version: '6.8.0'
+        target: 'android'
+        arch: 'android_arm64_v8a'
+    - name: Build QGC (CMake)
+      run: |
+        sudo apt-get install -y ninja-build
+        chmod -R +x /home/runner/work/qgroundcontrol/Qt/6.8.0/*/bin/*
+        
+        # Добавлен параметр QT_HOST_PATH, который требовал скрипт QGC
+        qt-cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DANDROID_ABI=arm64-v8a -DQT_HOST_PATH=/home/runner/work/qgroundcontrol/Qt/6.8.0/gcc_64
+        
+        cmake --build build --config Release
+        cmake --build build --target apk || true
+    - uses: actions/upload-artifact@v4
+      with: 
+        name: QGC-RM510-Build
+        path: "**/*.apk"
+        retention-days: 3
