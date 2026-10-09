@@ -1,0 +1,43 @@
+﻿name: Android APK Build (sky-rus)
+
+on:
+  push:
+    branches: [ "sky-rus" ]
+  workflow_dispatch:
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Setup Java
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '11'
+
+    - name: Setup Qt
+      uses: jurplel/install-qt-action@v3
+      with:
+        version: '5.15.2'
+        target: 'android'
+        arch: 'android_arm64_v8a'
+
+    - name: Build QGC
+      run: |
+        mkdir build && cd build
+        qmake ../qgroundcontrol.pro -spec android-clang CONFIG+=release
+        make -j$(nproc)
+        make install INSTALL_ROOT=android-build
+        androiddeployqt --input android-libQGroundControl.so-deployment-settings.json --output android-build --gradle
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: QGC-RM510-Build
+        path: build/android-build/build/outputs/apk/release/*.apk
+        retention-days: 3
