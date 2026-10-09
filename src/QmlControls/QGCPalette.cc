@@ -1,4 +1,4 @@
-#include "QGCPalette.h"
+﻿#include "QGCPalette.h"
 #include "QGCCorePlugin.h"
 
 #include <QtCore/QDebug>
@@ -119,3 +119,4 @@ void QGCPalette::_signalPaletteChanged()
 {
     emit paletteChanged();
 }
+
