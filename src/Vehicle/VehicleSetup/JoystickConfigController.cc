@@ -212,3 +212,4 @@ bool JoystickConfigController::_stickFunctionEnabled(StickFunction stickFunction
 
     return false;
 }
+
