@@ -16,12 +16,11 @@ jobs:
     - name: Build QGC (CMake)
       run: |
         sudo apt-get install -y ninja-build
-        
-        # Принудительно даем права на запуск всем файлам в папке bin
         chmod -R +x /home/runner/work/qgroundcontrol/Qt/6.8.0/*/bin/*
         
-        # Запускаем сборку
-        qt-cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DANDROID_ABI=arm64-v8a
+        # Добавлен параметр QT_HOST_PATH, который требовал скрипт QGC
+        qt-cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DANDROID_ABI=arm64-v8a -DQT_HOST_PATH=/home/runner/work/qgroundcontrol/Qt/6.8.0/gcc_64
+        
         cmake --build build --config Release
         cmake --build build --target apk || true
     - uses: actions/upload-artifact@v4
