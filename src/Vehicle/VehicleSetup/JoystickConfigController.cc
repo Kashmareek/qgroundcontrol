@@ -1,4 +1,4 @@
-#include "JoystickConfigController.h"
+﻿#include "JoystickConfigController.h"
 
 #include "Fact.h"
 #include "Joystick.h"
